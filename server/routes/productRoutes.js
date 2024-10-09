@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
+const mongoose = require('mongoose');
 
 // Create a new product
 router.post('/create', async (req, res) => {
     const { name, description, price, stock, category } = req.body;
+
     const newProduct = new Product({ name, description, price, stock, category });
     try {
         await newProduct.save();
@@ -29,9 +31,12 @@ router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const product = await Product.findById(id);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
         res.status(200).json(product);
     } catch (error) {
-        res.status(404).json({ message: `Product not found: ${error.message}` });
+        res.status(400).json({ message: `Error: ${error.message}` });
     }
 });
 
@@ -40,7 +45,10 @@ router.put('/update/:id', async (req, res) => {
     const { id } = req.params;
     try {
         const updatedProduct = await Product.findByIdAndUpdate(id, req.body, { new: true });
-        res.status(200).json(updatedProduct);
+        if (!updatedProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+        res.status(200).json({ success: true, message: 'Product updated successfully', product: updatedProduct });
     } catch (error) {
         res.status(400).json({ message: `Update failed: ${error.message}` });
     }
@@ -50,7 +58,10 @@ router.put('/update/:id', async (req, res) => {
 router.delete('/delete/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        await Product.findByIdAndDelete(id);
+        const deletedProduct = await Product.findByIdAndDelete(id);
+        if (!deletedProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
         res.status(200).json({ message: 'Product deleted successfully' });
     } catch (error) {
         res.status(400).json({ message: `Delete failed: ${error.message}` });
@@ -63,9 +74,12 @@ router.put('/manage-stock/:id', async (req, res) => {
     const { stock } = req.body;
     try {
         const product = await Product.findById(id);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
         product.stock = stock;
         await product.save();
-        res.status(200).json(product);
+        res.status(200).json({ success: true, message: 'Stock updated successfully', product });
     } catch (error) {
         res.status(400).json({ message: `Failed to update stock: ${error.message}` });
     }
