@@ -1,64 +1,99 @@
-import React from 'react'
-import { Container, Navbar, Nav, Image, Dropdown } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { logoutUser } from '../actions/userAction';
-const NavBar = () => {
-    const dispatch = useDispatch()
-    const cartState = useSelector(state => state.cartReducer)
-    const userState = useSelector(state => state.loginUserReducer)
-    const { currentUser } = userState
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios'; // Import axios for API requests
+import './navbar.css'; // Import your CSS file for styling
+import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+
+const Navbar = () => {
+    const [categories, setCategories] = useState([]); // State for storing categories
+    const [isDropdownOpen, setDropdownOpen] = useState(false);
+    const [searchTerm, setSearchTerm] = useState(''); // State for search term
+
+    const toggleDropdown = () => {
+        setDropdownOpen(!isDropdownOpen);
+    };
+
+    useEffect(() => {
+        // Fetch categories directly from the API on component mount
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get('/api/products/categories'); // Replace with your API endpoint
+                setCategories(response.data); // Assuming response.data is an array of categories
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+            }
+        };
+        fetchCategories();
+    }, []);
+
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        if (searchTerm) {
+            // Navigate to a search results page or handle search functionality here
+            console.log("Search Term:", searchTerm);
+        }
+    };
+
     return (
-        <>
-            <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
-                <Container>
-                    <Navbar.Brand > <Image src="images/logo.png" style={{ height: "50px" }} /></Navbar.Brand>
-                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                    <Navbar.Collapse id="responsive-navbar-nav">
-                        <Nav className="ms-auto">
-                            {
-                                currentUser ? (
-                                    <>
-                                        {/* <Nav.Link  >{currentUser.name}</Nav.Link> */}
-                                        <Dropdown Dropdown >
-                                            <Dropdown.Toggle variant="success" id="dropdown-basic">
-                                                {currentUser.name}
-                                            </Dropdown.Toggle>
+        <nav className="navbar">
+            <div className="navbar-container">
+                <div className="logo">Pramod</div>
+                <ul className="nav-links">
+                    <li>
+                        <Link to="/">Home</Link>
+                    </li>
+                    <li>
+                        <div className="dropdown">
+                            <button className="dropbtn" onClick={toggleDropdown}>Products Category</button>
+                            <div className="dropdown-content">
 
-                                            <Dropdown.Menu>
-                                                <LinkContainer to="/orders">
-                                                    <Dropdown.Item  >Order</Dropdown.Item>
-                                                </LinkContainer>
+                                <ul className="dropdown-menu">
 
-                                                <Dropdown.Item onClick={() => dispatch(logoutUser())}>Logout</Dropdown.Item>
+                                    <li >
+                                        <Link to={`/category/tech`}>
+                                            Food
+                                        </Link>
+                                    </li>
+                                    <li >
+                                        <Link to={`/category/tech`}>
+                                            Tech
+                                        </Link>
+                                    </li>
 
-                                            </Dropdown.Menu>
-                                        </Dropdown>
-                                    </>
+                                </ul>
 
-                                ) : (
-                                    <>
-                                        <LinkContainer to="/login">
-                                            <Nav.Link  >Login</Nav.Link>
-                                        </LinkContainer>
-                                        <LinkContainer to="/register">
-                                            <Nav.Link  >Register</Nav.Link>
-                                        </LinkContainer>
-                                    </>)
-                            }
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <Link to="/contact">Contact Us</Link>
+                    </li>
+                </ul>
+                <div className="search-bar">
+                    <form onSubmit={handleSearchSubmit}>
+                        <input
+                            type="text"
+                            placeholder="Search..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
+                <div className="social-media">
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                        <FaFacebook />
+                    </a>
+                    <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+                        <FaTwitter />
+                    </a>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                        <FaInstagram />
+                    </a>
+                </div>
+            </div>
+        </nav>
+    );
+};
 
-                            <LinkContainer to="/cart">
-                                <Nav.Link  >Cart {cartState.cartItems.length}</Nav.Link>
-
-                            </LinkContainer>
-
-                        </Nav>
-
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar >
-        </>
-    )
-}
-
-export default NavBar;
+export default Navbar;
