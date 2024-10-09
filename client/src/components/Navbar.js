@@ -51,7 +51,7 @@ const Navbar = () => {
 
                                     <li >
                                         <Link to={`/category/tech`}>
-                                            Food
+                                            Pizza
                                         </Link>
                                     </li>
                                     <li >
