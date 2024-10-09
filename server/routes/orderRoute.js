@@ -1,16 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const Order = require('../models/orderModel');
+const Cart = require('../models/Cart');
 
 // Create a new order
 router.post('/create', async (req, res) => {
-    const { products, customer, totalAmount } = req.body;
-    const newOrder = new Order({ products, customer, totalAmount });
+    const { products, customerId, totalAmount } = req.body;
+    const newOrder = new Order({ products, customerId, totalAmount });
     try {
         await newOrder.save();
-        res.status(201).json({ success: true, message: 'Order placed successfully' });
+        await Cart.findOneAndDelete({ customerId });
+        res.status(201).json({ success: true });
     } catch (error) {
-        res.status(400).json({ message: `Error: ${error.message}` });
+        res.status(400).json({ success: false, message: `Error: ${error.message}` });
     }
 });
 
@@ -28,7 +30,7 @@ router.get('/all', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
-        const order = await Order.findById(id);
+        const order = await Order.find({ customerId: id });
         res.status(200).json(order);
     } catch (error) {
         res.status(404).json({ message: `Order not found: ${error.message}` });

@@ -7,7 +7,8 @@ const orderSchema = new mongoose.Schema({
             quantity: { type: Number, required: true },
         },
     ],
-    customer: { type: String, required: true },
+    customerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+
     totalAmount: { type: Number, required: true },
     status: { type: String, default: 'Pending' },
     createdAt: { type: Date, default: Date.now },

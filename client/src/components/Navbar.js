@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios'; // Import axios for API requests
-import './navbar.css'; // Import your CSS file for styling
+import axios from 'axios';
+import { IoIosContact } from "react-icons/io";
+import './navbar.css';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
-
+import Img from "./images/image.png"
 const Navbar = () => {
-    const [categories, setCategories] = useState([]); // State for storing categories
-    const [isDropdownOpen, setDropdownOpen] = useState(false);
-    const [searchTerm, setSearchTerm] = useState(''); // State for search term
+    const [categories, setCategories] = useState([]);
+    const [isDropdownOpen, setDropdownOpen] = useState(true);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const toggleDropdown = () => {
-        setDropdownOpen(!isDropdownOpen);
+        // setDropdownOpen(!isDropdownOpen);
     };
 
     useEffect(() => {
-        // Fetch categories directly from the API on component mount
         const fetchCategories = async () => {
             try {
                 const response = await axios.get('/api/products/categories'); // Replace with your API endpoint
@@ -37,14 +37,14 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="navbar-container">
-                <div className="logo">Pramod</div>
+                <div className="logo"><img src={Img} alt="" width={'50px'} /></div>
                 <ul className="nav-links">
                     <li>
                         <Link to="/">Home</Link>
                     </li>
                     <li>
                         <div className="dropdown">
-                            <button className="dropbtn" onClick={toggleDropdown}>Products Category</button>
+                            <button className="dropbtn"  >Products Category</button>
                             <div className="dropdown-content">
 
                                 <ul className="dropdown-menu">
@@ -90,6 +90,9 @@ const Navbar = () => {
                     <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
                         <FaInstagram />
                     </a>
+                    <Link to="/profile"  >
+                        <IoIosContact size={30} />
+                    </Link>
                 </div>
             </div>
         </nav>

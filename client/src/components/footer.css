@@ -4,7 +4,10 @@
   padding: 20px;
   text-align: center;
 }
-
+.logo {
+  width: 40px;
+  border-radius: 50%;
+}
 .footer-content {
   display: flex;
   justify-content: space-between;
@@ -14,10 +17,6 @@
 
 .footer-logo {
   flex: 1;
-}
-
-.logo {
-  width: 100px; /* Adjust as necessary */
 }
 
 .footer-info {

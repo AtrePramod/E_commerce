@@ -24,13 +24,7 @@ router.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({ email });
         if (user && (await bcrypt.compare(password, user.password))) {
-            const currentUser = {
-                name: user.name,
-                email: user.email,
-                isAdmin: user.isAdmin,
-                _id: user._id
-            };
-            res.status(200).send(currentUser);
+            res.status(200).send(user);
         } else {
             res.status(400).json({ message: 'Login Failed' });
         }

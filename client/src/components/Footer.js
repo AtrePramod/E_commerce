@@ -1,14 +1,14 @@
 import React from 'react';
 import './footer.css'; // Import your CSS file for styling
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
-
+import Img from '../components/images/image.png'
 const Footer = () => {
     return (
         <footer className="footer">
             <div className="footer-content">
                 <div className="footer-logo">
-                    <img src="path_to_your_logo.png" alt="Company Logo" className="logo" />
-                    <h1>Your Company Name</h1>
+                    <img src={Img} alt="Company Logo" className="logo" />
+                    <h1>Pramod Infotech</h1>
                 </div>
                 <div className="footer-info">
                     <p><strong>Address:</strong> 123 Main Street, City, Country</p>
@@ -19,13 +19,13 @@ const Footer = () => {
                     <h3>Follow Us:</h3>
                     <div className="social-links">
                         <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-                            <FaFacebook />
+                            <FaFacebook size={30} />
                         </a>
                         <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-                            <FaTwitter />
+                            <FaTwitter size={30} />
                         </a>
                         <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-                            <FaInstagram />
+                            <FaInstagram size={30} />
                         </a>    </div>
                 </div>
             </div>

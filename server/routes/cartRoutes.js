@@ -4,44 +4,70 @@ const Cart = require('../models/Cart');
 
 // Add product to cart
 router.post('/add', async (req, res) => {
-    const { customer, products } = req.body;
-    const newCart = new Cart({ customer, products });
+    const { customerId, products } = req.body; // Extract customerId and products from request body
+
+    // Validate input
+    if (!customerId) {
+        return res.status(400).json({ message: 'Customer ID is required' });
+    }
+
+    // Validate products input
+    if (!Array.isArray(products) || products.length === 0) {
+        return res.status(400).json({ message: 'Products array is required and should not be empty' });
+    }
+
+    // Create new cart object
+    const newCart = new Cart({ customerId, products }); // Create new cart with customerId and products
+
     try {
+        // Save the cart to the database
         await newCart.save();
-        res.status(201).json({ success: true, message: 'Product added to cart successfully' });
+        res.status(201).json({ success: true, message: 'Products added to cart successfully', cart: newCart });
     } catch (error) {
-        res.status(400).json({ message: `Error: ${error.message}` });
+        res.status(400).json({ message: `Error: ${error.message}`, error });
     }
 });
 
 // Get cart for a customer
-router.get('/:customer', async (req, res) => {
-    const { customer } = req.params;
+router.get('/:customerId', async (req, res) => {
+    const { customerId } = req.params; // Extract customer ID from request params
+
     try {
-        const cart = await Cart.findOne({ customer });
-        res.status(200).json(cart);
+        const cart = await Cart.find({ customerId }); // Find the cart by customer ID
+        if (!cart) {
+            return res.status(404).json({ message: 'Cart not found' }); // Return 404 if cart is not found
+        }
+        res.status(200).json(cart); // Return the found cart
     } catch (error) {
-        res.status(404).json({ message: `Cart not found: ${error.message}` });
+        res.status(500).json({ message: `Error fetching cart: ${error.message}` });
     }
 });
 
 // Update cart items
-router.put('/update/:customer', async (req, res) => {
-    const { customer } = req.params;
+router.put('/update/:customerId', async (req, res) => {
+    const { customerId } = req.params; // Extract customer ID from request params
+
     try {
-        const updatedCart = await Cart.findOneAndUpdate({ customer }, req.body, { new: true });
-        res.status(200).json(updatedCart);
+        const updatedCart = await Cart.findOneAndUpdate({ customerId }, req.body, { new: true }); // Update the cart
+        if (!updatedCart) {
+            return res.status(404).json({ message: 'Cart not found' }); // Return 404 if cart is not found
+        }
+        res.status(200).json(updatedCart); // Return the updated cart
     } catch (error) {
         res.status(400).json({ message: `Update failed: ${error.message}` });
     }
 });
 
 // Delete a cart
-router.delete('/delete/:customer', async (req, res) => {
-    const { customer } = req.params;
+router.delete('/delete/:customerId', async (req, res) => {
+    const { customerId } = req.params; // Extract customer ID from request params
+
     try {
-        await Cart.findOneAndDelete({ customer });
-        res.status(200).json({ message: 'Cart deleted successfully' });
+        const deletedCart = await Cart.findOneAndDelete({ customerId }); // Delete the cart by customer ID
+        if (!deletedCart) {
+            return res.status(404).json({ message: 'Cart not found' }); // Return 404 if cart is not found
+        }
+        res.status(200).json({ message: 'Cart deleted successfully' }); // Return success message
     } catch (error) {
         res.status(400).json({ message: `Delete failed: ${error.message}` });
     }

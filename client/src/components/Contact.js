@@ -28,7 +28,7 @@ const Contact = () => {
         setLoading(true);
         setError('');
         try {
-            const response = await axios.post('/api/contact', formData); // Replace with your API endpoint
+            const response = await axios.post('/api/enquiries/create', formData); // Replace with your API endpoint
             console.log(response.data); // You can handle the response as needed
             setSuccess(true);
             setFormData({
@@ -109,13 +109,13 @@ const Contact = () => {
             <div className="google-map">
                 <h2>Find Us Here</h2>
                 <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.835434509177!2d144.95373531568316!3d-37.81627997975121!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f0f4c15%3A0xf11b3b3b7a1ebf44!2sYour%20Business%20Name!5e0!3m2!1sen!2sus!4v1633764402495!5m2!1sen!2sus"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3891.73046968594!2d74.6872204!3d19.181265!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bdcbbe061fe9e81%3A0x1972733fbb666d7e!2sDr.Vithalrao%20Vikhe%20Patil%20College%20Of%20Engineering%2C%20Ahmednagar%2C!5e0!3m2!1sen!2sin!4v1696849320482!5m2!1sen!2sin"
                     width="600"
                     height="450"
                     style={{ border: 0 }}
                     allowFullScreen=""
                     loading="lazy"
-                    title="Google Map"
+                    title="Google Map - Dr. Vithalrao Vikhe Patil College of Engineering"
                 ></iframe>
             </div>
         </div>

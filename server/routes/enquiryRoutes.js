@@ -4,8 +4,12 @@ const Enquiry = require('../models/Enquiry');
 
 // Create a new enquiry
 router.post('/create', async (req, res) => {
-    const { name, email, message } = req.body;
-    const newEnquiry = new Enquiry({ name, email, message });
+    const { name, email, message, contact,
+        subject } = req.body;
+    const newEnquiry = new Enquiry({
+        name, email, message, contact,
+        subject
+    });
     try {
         await newEnquiry.save();
         res.status(201).json({ success: true, message: 'Enquiry submitted successfully' });
