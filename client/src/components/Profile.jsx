@@ -58,12 +58,30 @@ const Profile = () => {
         }
     };
 
+    const handleLogout = () => {
+        // Clear user data from localStorage
+        localStorage.removeItem('userInfo');
+        // Redirect to login page
+        history.push('/login');
+    };
 
 
     if (!user) return <div>Loading...</div>; // Loading state
 
     return (
         <div className="profile-container">
+            {/* Logout Button */}
+            <div className="logout-button-container " style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'flex-end'
+            }}>
+                <button className="logout-button" style={{ backgroundColor: "red" }} onClick={handleLogout}>
+                    Logout
+                </button>
+            </div>
+
             <h2>Customer Profile</h2>
             {editMode ? (
                 <div className="profile-edit">

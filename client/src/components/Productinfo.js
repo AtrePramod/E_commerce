@@ -5,9 +5,9 @@ import { useParams, useHistory } from 'react-router-dom'; // Import useHistory
 import Img from "../image.png"
 const Productinfo = () => {
     const { id } = useParams(); // Get the product ID from the URL
+    const history = useHistory(); // Initialize history
     const [product, setProduct] = useState(null);
     const [user, setUser] = useState(null); // State to hold user info
-    const history = useHistory(); // Initialize history
 
     useEffect(() => {
         const fetchProduct = async () => {

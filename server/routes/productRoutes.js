@@ -39,6 +39,19 @@ router.get('/:id', async (req, res) => {
         res.status(400).json({ message: `Error: ${error.message}` });
     }
 });
+// Get a single product by cate
+router.get('/cate/:cate', async (req, res) => {
+    const { cate } = req.params;
+    try {
+        const products = await Product.find({ category: cate });
+        if (products.length === 0) {
+            return res.status(404).json({ message: 'No products found in this category' });
+        }
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ message: `Error: ${error.message}` });
+    }
+});
 
 // Update a product
 router.put('/update/:id', async (req, res) => {
